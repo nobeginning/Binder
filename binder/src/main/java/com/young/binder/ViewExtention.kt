@@ -22,10 +22,11 @@ fun View.bind(binderCloud: BinderCloud, eventTag: String, initValueEnabled: Bool
     if (initValueEnabled) {
         event.changed()
     }
-    binderCloud.addEvent(eventTag, event)
     val adapterTag = getTag(ID_IN_ADAPTER)
     if (adapterTag!=null){
         binderCloud.addAdapterEvent(this, eventTag, event)
+    }else {
+        binderCloud.addEvent(eventTag, event)
     }
 }
 
@@ -34,10 +35,11 @@ fun TextView.bindText(binderCloud: BinderCloud, eventTag: String, initValueEnabl
     if (initValueEnabled) {
         event.changed()
     }
-    binderCloud.addEvent(eventTag, event)
     val adapterTag = getTag(ID_IN_ADAPTER)
     if (adapterTag!=null){
         binderCloud.addAdapterEvent(this, eventTag, event)
+    }else {
+        binderCloud.addEvent(eventTag, event)
     }
 }
 
@@ -46,10 +48,11 @@ fun View.bindVisibility(binderCloud: BinderCloud, eventTag: String, initValueEna
     if (initValueEnabled) {
         event.changed()
     }
-    binderCloud.addEvent(eventTag, event)
     val adapterTag = getTag(ID_IN_ADAPTER)
     if (adapterTag!=null){
         binderCloud.addAdapterEvent(this, eventTag, event)
+    }else {
+        binderCloud.addEvent(eventTag, event)
     }
 }
 
@@ -58,10 +61,11 @@ fun ImageView.bindImageBitmap(binderCloud: BinderCloud, eventTag: String, initVa
     if (initValueEnabled) {
         event.changed()
     }
-    binderCloud.addEvent(eventTag, event)
     val adapterTag = getTag(ID_IN_ADAPTER)
     if (adapterTag!=null){
         binderCloud.addAdapterEvent(this, eventTag, event)
+    }else {
+        binderCloud.addEvent(eventTag, event)
     }
 }
 
@@ -70,9 +74,10 @@ fun ImageView.bindImageResource(binderCloud: BinderCloud, eventTag: String, init
     if (initValueEnabled) {
         event.changed()
     }
-    binderCloud.addEvent(eventTag, event)
     val adapterTag = getTag(ID_IN_ADAPTER)
     if (adapterTag!=null){
         binderCloud.addAdapterEvent(this, eventTag, event)
+    }else {
+        binderCloud.addEvent(eventTag, event)
     }
 }
