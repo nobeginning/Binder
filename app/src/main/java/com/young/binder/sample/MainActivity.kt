@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import com.young.binder.controller.ActivityController
 import org.jetbrains.anko.setContentView
 
-class MainActivity : AppCompatActivity(), ActivityController {
-    override fun getActivity(): Activity {
+class MainActivity : AppCompatActivity(), ActivityController<Activity> {
+    override fun getOwnerActivity(): Activity {
         return this
     }
 

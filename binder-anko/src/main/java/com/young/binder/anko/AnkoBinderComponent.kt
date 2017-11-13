@@ -10,7 +10,7 @@ import org.jetbrains.anko.AnkoContextImpl
  */
 
 fun <T : Controller, R : BinderCloud> AnkoBinderComponent<T, R>.setContentView(controller: T, bindData: R): View {
-    return createView(AnkoContextImpl(controller.getContext(), controller, true), bindData)
+    return createView(AnkoContextImpl(controller.getOwnerContext(), controller, true), bindData)
 }
 
 public interface AnkoBinderComponent<in T : Controller, in R : BinderCloud> {

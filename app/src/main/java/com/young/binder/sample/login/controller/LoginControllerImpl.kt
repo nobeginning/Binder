@@ -16,7 +16,7 @@ class LoginControllerImpl(private val act: Activity, private val dataBinder: Log
     val random = Random()
     val provinces = arrayListOf("北京市", "河北省", "安徽省", "湖南省", "辽宁省", "云南省", "山东省", "浙江省")
 
-    override fun getActivity(): Activity {
+    override fun getOwnerActivity(): Activity {
         return act
     }
 

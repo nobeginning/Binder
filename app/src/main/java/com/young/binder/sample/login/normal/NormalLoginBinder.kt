@@ -4,6 +4,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import com.bumptech.glide.Glide
+import com.young.binder.*
+import com.young.binder.sample.list.ListActivity
 import com.young.binder.sample.login.controller.LoginController
 import com.young.binder.sample.login.data.LoginBinderCloud
 import kotlinx.android.synthetic.main.activity_login.view.*
@@ -68,6 +70,9 @@ class NormalLoginBinder : NormalBinder<LoginController, LoginBinderCloud> {
             Glide.with(view.ivIcon)
                     .load(dataBinder.user?.icon)
                     .into(view.ivIcon)
+        }
+        view.ivIcon.setOnClickListener {
+            ListActivity.launch(loginController.getOwnerActivity())
         }
     }
 }
