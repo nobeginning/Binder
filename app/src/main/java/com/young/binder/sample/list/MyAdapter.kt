@@ -17,9 +17,6 @@ import kotlinx.android.synthetic.main.cell_list.view.*
 class MyAdapter(private val binderCloud: ListActivityBinderCloud,
                 private val controller: ListActivityController) : BaseAdapter() {
 
-    private val adapterBinderCloud: AdapterBinderCloud = AdapterBinderCloud()
-
-
     override fun getItem(position: Int): Item {
         println("执行getItem $position")
         return binderCloud.dataSource[position]
