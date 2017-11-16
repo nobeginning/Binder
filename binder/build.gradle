@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.young.binder'
 
 android {
     compileSdkVersion 26
@@ -41,11 +44,11 @@ repositories {
     mavenCentral()
 }
 
-publish{
-    userOrg = 'cstick' // Bintray 账号名
-    groupId = 'com.young'
-    artifactId = 'binder'
-    publishVersion = '0.1.0'
-    desc = 'A binder library for android'
-    website = 'https://github.com/cunxinaimei/Binder'
-}
+//publish{
+//    userOrg = 'cstick' // Bintray 账号名
+//    groupId = 'com.young'
+//    artifactId = 'binder'
+//    publishVersion = '0.1.0'
+//    desc = 'A binder library for android'
+//    website = 'https://github.com/cunxinaimei/Binder'
+//}
