@@ -31,6 +31,7 @@ allprojects {
 }
 
 tasks.getByPath(":binder:releaseAndroidJavadocs").enabled = false
+tasks.getByPath(":binder:debugAndroidJavadocs").enabled = false
 
 task clean(type: Delete) {
     delete rootProject.buildDir
