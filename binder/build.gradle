@@ -1,10 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 26
-
-
 
     defaultConfig {
         minSdkVersion 15
@@ -23,6 +22,10 @@ android {
         }
     }
 
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
 }
 
 dependencies {
@@ -36,4 +39,13 @@ dependencies {
 }
 repositories {
     mavenCentral()
+}
+
+publish{
+    userOrg = 'cstick' // Bintray 账号名
+    groupId = 'com.young'
+    artifactId = 'binder'
+    publishVersion = '0.1.0'
+    desc = 'A binder library for android'
+    website = 'https://github.com/cunxinaimei/Binder'
 }
