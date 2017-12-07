@@ -35,7 +35,9 @@ class ListActivityController(private val act: ListActivity, private val binderCl
                         item1.copy(title = "Title 19", desc = "desc 19")
                         )
             }
+            binderCloud.isLoading = true
             binderCloud.dataSource = loading.await()
+            binderCloud.isLoading = false
         }
     }
 

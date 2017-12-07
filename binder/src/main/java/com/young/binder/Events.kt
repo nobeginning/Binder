@@ -13,33 +13,33 @@ interface Event {
     fun changed()
 }
 
-data class SuperEvent(private val view: View, private val block: () -> Unit) : Event {
+data class SuperEvent<T, out R>(private val t: T, private val block: T.() -> R) : Event {
     override fun changed() {
-        view.apply { block() }
+        t.block()
     }
 }
 
-data class TextEvent(private val view: TextView, private val block: () -> CharSequence) : Event {
+data class TextEvent<T : TextView>(private val view: T, private val block: T.() -> CharSequence) : Event {
     public override fun changed() {
-        view.text = block()
+        view.text = view.block()
     }
 }
 
-data class BitmapEvent(private val view: ImageView, private val block: () -> Bitmap) : Event {
+data class BitmapEvent<T : ImageView>(private val view: T, private val block: T.() -> Bitmap) : Event {
     public override fun changed() {
-        view.setImageBitmap(block())
+        view.setImageBitmap(view.block())
     }
 }
 
-data class ImageResourceEvent(private val view: ImageView, private val block: () -> Int) : Event {
+data class ImageResourceEvent<T : ImageView>(private val view: T, private val block: T.() -> Int) : Event {
     public override fun changed() {
-        view.setImageResource(block())
+        view.setImageResource(view.block())
     }
 }
 
-data class VisibilityEvent(private val view: View, private val block: () -> Visibility) : Event {
+data class VisibilityEvent<T : View>(private val view: T, private val block: T.() -> Visibility) : Event {
     override fun changed() {
-        view.visibility = when (block()) {
+        view.visibility = when (view.block()) {
             Visibility.VISIBLE -> View.VISIBLE
             Visibility.INVISIBLE -> View.INVISIBLE
             else -> View.GONE

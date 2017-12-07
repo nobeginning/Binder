@@ -3,6 +3,7 @@ package com.young.binder.sample.login.normal
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.young.binder.*
 import com.young.binder.sample.list.ListActivity
@@ -30,6 +31,8 @@ class NormalLoginBinder : NormalBinder<LoginController, LoginBinderCloud> {
     }
 
     val viewBinder = ViewBinderCloud()
+    val listener: Any = Any()
+    var toast: Toast? = null
 
     override fun bind(view: View, loginController: LoginController, dataBinder: LoginBinderCloud) {
         view.etUsername.addTextChangedListener(object : TextWatcher {
@@ -50,9 +53,24 @@ class NormalLoginBinder : NormalBinder<LoginController, LoginBinderCloud> {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+//        view.btnLogin.bind(viewBinder, "input") {
+//            view.btnLogin.isEnabled = viewBinder.username.isNotEmpty() && viewBinder.password.isNotEmpty()
+//        }
+
         view.btnLogin.bind(viewBinder, "input") {
-            view.btnLogin.isEnabled = viewBinder.username.isNotEmpty() && viewBinder.password.isNotEmpty()
+            isEnabled = viewBinder.username.isNotEmpty() && viewBinder.password.isNotEmpty()
         }
+
+        listener.bind(viewBinder, "input") {
+            if (viewBinder.username.length >= 2 && viewBinder.password.length >= 4) {
+                if (toast != null) {
+                    toast!!.cancel()
+                }
+                toast = Toast.makeText(loginController.getOwnerContext(), "username: ${viewBinder.username}\npassword: ${viewBinder.password}", Toast.LENGTH_SHORT)
+                toast?.show()
+            }
+        }
+
         view.btnLogin.onClick { loginController.login(viewBinder.username, viewBinder.password) }
         view.tvResult.bindText(dataBinder, "loginSuccess", false) {
             "Hello! ${dataBinder.user?.name}, 您的信息如下：\n" +

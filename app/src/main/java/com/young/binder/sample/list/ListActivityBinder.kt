@@ -8,21 +8,22 @@ import kotlinx.android.synthetic.main.activity_list.view.*
 /**
  * Created by young on 2017/11/13.
  */
-class ListActivityBinder: NormalBinder<ListActivityController, ListActivityBinderCloud> {
+class ListActivityBinder : NormalBinder<ListActivityController, ListActivityBinderCloud> {
 
     override fun bind(view: View, controller: ListActivityController, binderCloud: ListActivityBinderCloud) {
+        view.progressBar.bind(binderCloud, "loading") {
+            visibility = if (binderCloud.isLoading) View.VISIBLE else View.GONE
+        }
         view.listView.adapter = MyAdapter(binderCloud, controller)
-        view.listView.setOnItemLongClickListener {
-            parent, view, position, id ->
-            binderCloud.isChoosing = true
+        view.listView.setOnItemLongClickListener { parent, view, position, id ->
+            binderCloud.isChoosing = !binderCloud.isChoosing
             true
         }
-        view.listView.setOnItemClickListener {
-            parent, view, position, id ->
-            val item:Item = parent.adapter.getItem(position) as Item
+        view.listView.setOnItemClickListener { parent, view, position, id ->
+            val item: Item = parent.adapter.getItem(position) as Item
             item.description = "desc after click"
         }
-        view.listView.bind(binderCloud, "dataSetChanged"){
+        view.listView.bind(binderCloud, "dataSetChanged") {
             (view.listView.adapter as MyAdapter).notifyDataSetChanged()
         }
     }

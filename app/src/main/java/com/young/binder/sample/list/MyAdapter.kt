@@ -3,6 +3,7 @@ package com.young.binder.sample.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,6 +17,9 @@ import kotlinx.android.synthetic.main.cell_list.view.*
  */
 class MyAdapter(private val binderCloud: ListActivityBinderCloud,
                 private val controller: ListActivityController) : BaseAdapter() {
+
+    private val animationDisplay = AnimationUtils.loadAnimation(controller.getOwnerContext(), R.anim.scale_in)
+    private val animationHidden = AnimationUtils.loadAnimation(controller.getOwnerContext(), R.anim.scale_out)
 
     override fun getItem(position: Int): Item {
         println("执行getItem $position")
@@ -32,28 +36,21 @@ class MyAdapter(private val binderCloud: ListActivityBinderCloud,
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         println("执行getView $position")
-        val view: View
-//        val holder:Holder
-        if (convertView == null) {
-            view = LayoutInflater.from(controller.getOwnerContext()).inflate(R.layout.cell_list, parent, false)
-//            holder = Holder()
-//            holder.ivIcon = view.ivIcon
-//            holder.tvTitle = view.tvTitle
-//            holder.tvDesc = view.tvDesc
-//            holder.ivStatus = view.ivStatus
-//            view.tag = holder
-        } else {
-            view = convertView
-//            holder = view.tag as Holder
+        val view: View = convertView ?: LayoutInflater.from(controller.getOwnerContext()).inflate(R.layout.cell_list, parent, false)
+
+        view.ivStatus.bindInAdapter(binderCloud, "choosing") {
+            if (binderCloud.isChoosing) {
+                if (visibility != View.VISIBLE) {
+                    startAnimation(animationDisplay)
+                }
+                visibility = View.VISIBLE
+            } else {
+                if (visibility != View.GONE) {
+                    startAnimation(animationHidden)
+                }
+                visibility = View.GONE
+            }
         }
-//        Glide.with(controller.getOwnerActivity()).load(getItem(position).icon).into(holder.ivIcon)
-//        holder.tvTitle!!.text = getItem(position).title
-//        holder.tvDesc!!.text = getItem(position).desc
-//        if (binderCloud.isChoosing) {
-//            holder.ivStatus!!.visibility = View.VISIBLE
-//        } else {
-//            holder.ivStatus!!.visibility = View.GONE
-//        }
 
         view.ivIcon.inAdapter().bind(binderCloud, "iconChanged"){
             Glide.with(controller.getOwnerActivity()).load(getItem(position).icon).into(view.ivIcon)
@@ -65,17 +62,9 @@ class MyAdapter(private val binderCloud: ListActivityBinderCloud,
         view.tvDesc.inAdapter().bindText(binderCloud, "descChanged"){
             getItem(position).description
         }
-        view.ivStatus.inAdapter().bindVisibility(binderCloud, "choosing"){
-            if (binderCloud.isChoosing){
-                Visibility.VISIBLE
-            }else{
-                Visibility.GONE
-            }
-        }
-//        adapterBinderCloud.positionChanged(view)
         return view
     }
 
-    class Holder(var ivIcon:ImageView?=null, var tvTitle:TextView?=null, var tvDesc:TextView?=null, var ivStatus:ImageView?=null)
+//    class Holder(var ivIcon:ImageView?=null, var tvTitle:TextView?=null, var tvDesc:TextView?=null, var ivStatus:ImageView?=null)
 
 }

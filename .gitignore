@@ -7,3 +7,5 @@
 /build
 /captures
 .externalNativeBuild
+/app/src/main/java/com/young/binder/receiver/
+/app/src/main/java/com/young/binder/service/
