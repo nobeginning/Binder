@@ -2,6 +2,7 @@ package com.young.binder
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import java.util.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.forEach
@@ -11,9 +12,17 @@ import kotlin.collections.forEach
  */
 abstract class BinderCloud {
 
+    private val tag = javaClass.simpleName
+
+    enum class DebugMode {
+        MODE_NONE, MODE_NORMAL, MODE_DETAILED
+    }
+
     private val binderMap = HashMap<String, ArrayList<Event>>()
     private val adapterBinderMap = HashMap<String, HashMap<Any, Event>>()
     private var mainHandler: Handler? = Handler(Looper.getMainLooper())
+
+    var debugMode: DebugMode = DebugMode.MODE_NONE
 
     @Deprecated("用不到，不会影响到GC")
     public fun clear() {
@@ -46,12 +55,21 @@ abstract class BinderCloud {
     }
 
     fun notifyDataChanged(eventTag: String) {
+        if (debugMode != DebugMode.MODE_NONE) {
+            Log.d(tag, "notifyDataChanged : $eventTag")
+        }
         val existList: ArrayList<Event>? = binderMap[eventTag]
         existList?.forEach {
+            if (debugMode == DebugMode.MODE_DETAILED) {
+                Log.d(tag, "detail notifyDataChanged : ${it}")
+            }
             mainHandler?.post { it.changed() }
         }
         val eventsInAdapter: HashMap<Any, Event>? = adapterBinderMap[eventTag]
         eventsInAdapter?.values?.forEach {
+            if (debugMode == DebugMode.MODE_DETAILED) {
+                Log.d(tag, "detail notifyDataChanged in adapter : ${it}")
+            }
             mainHandler?.post { it.changed() }
         }
     }
