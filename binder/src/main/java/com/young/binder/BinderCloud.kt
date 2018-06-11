@@ -18,8 +18,8 @@ abstract class BinderCloud {
         MODE_NONE, MODE_NORMAL, MODE_DETAILED
     }
 
-    private val binderMap = HashMap<String, ArrayList<Event>>()
-    private val adapterBinderMap = HashMap<String, HashMap<Any, Event>>()
+    private val binderMap = HashMap<String, ArrayList<Event<*>>>()
+    private val adapterBinderMap = HashMap<String, HashMap<Any, Event<*>>>()
     private var mainHandler: Handler? = Handler(Looper.getMainLooper())
 
     var debugMode: DebugMode = DebugMode.MODE_NONE
@@ -36,12 +36,37 @@ abstract class BinderCloud {
         mainHandler = null
     }
 
-    protected fun getBinderMap():HashMap<String, ArrayList<Event>>{
+    fun remove(any: Any, eventTag: String?) {
+        if (eventTag == null || eventTag.isEmpty()) {
+            binderMap.values.forEach {
+                val iterator = it.iterator()
+                while (iterator.hasNext()) {
+                    val value = iterator.next()
+                    if (any == value.getObserver()) {
+                        iterator.remove()
+                    }
+                }
+            }
+        } else {
+            val eventList = binderMap[eventTag]
+            eventList?.apply {
+                val iterator = iterator()
+                while (iterator.hasNext()) {
+                    val value = iterator.next()
+                    if (any == value.getObserver()) {
+                        iterator.remove()
+                    }
+                }
+            }
+        }
+    }
+
+    protected fun getBinderMap(): HashMap<String, ArrayList<Event<*>>> {
         return binderMap
     }
 
-    fun addEvent(eventTag: String, event: Event) {
-        var existList: ArrayList<Event>? = binderMap[eventTag]
+    fun addEvent(eventTag: String, event: Event<*>) {
+        var existList: ArrayList<Event<*>>? = binderMap[eventTag]
         if (existList == null) {
             existList = ArrayList()
             binderMap[eventTag] = existList
@@ -49,9 +74,9 @@ abstract class BinderCloud {
         existList.add(event)
     }
 
-    fun addAdapterEvent(t: Any, eventTag: String, event: Event) {
-        var existBinderMap: HashMap<Any, Event>? = adapterBinderMap[eventTag]
-        if (existBinderMap==null){
+    fun addAdapterEvent(t: Any, eventTag: String, event: Event<*>) {
+        var existBinderMap: HashMap<Any, Event<*>>? = adapterBinderMap[eventTag]
+        if (existBinderMap == null) {
             existBinderMap = HashMap()
             existBinderMap[t] = event
             adapterBinderMap[eventTag] = existBinderMap
@@ -64,14 +89,14 @@ abstract class BinderCloud {
         if (debugMode != DebugMode.MODE_NONE) {
             Log.d(tag, "notifyDataChanged : $eventTag")
         }
-        val existList: ArrayList<Event>? = binderMap[eventTag]
+        val existList: ArrayList<Event<*>>? = binderMap[eventTag]
         existList?.forEach {
             if (debugMode == DebugMode.MODE_DETAILED) {
                 Log.d(tag, "[$eventTag] -> detail notifyDataChanged : $it")
             }
             mainHandler?.post { it.changed() }
         }
-        val eventsInAdapter: HashMap<Any, Event>? = adapterBinderMap[eventTag]
+        val eventsInAdapter: HashMap<Any, Event<*>>? = adapterBinderMap[eventTag]
         eventsInAdapter?.values?.forEach {
             if (debugMode == DebugMode.MODE_DETAILED) {
                 Log.d(tag, "detail notifyDataChanged in adapter : $it")

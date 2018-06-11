@@ -10,10 +10,10 @@ import android.widget.TextView
  */
 
 @Deprecated("Use #T.bindInAdapter instead")
-val ID_IN_ADAPTER:Int = 0x10000001
+val ID_IN_ADAPTER: Int = 0x10000001
 
 @Deprecated("Use #T.bindInAdapter instead")
-fun <T:View> T.inAdapter(): T {
+fun <T : View> T.inAdapter(): T {
     setTag(ID_IN_ADAPTER, true)
     return this
 }
@@ -24,6 +24,10 @@ fun <T, R> T.bind(binderCloud: BinderCloud, eventTag: String, initValueEnabled: 
         event.changed()
     }
     binderCloud.addEvent(eventTag, event)
+}
+
+fun <T> T.unBindFrom(binderCloud: BinderCloud, eventTag: String? = null) {
+    binderCloud.remove(this as Any, eventTag)
 }
 
 fun <T, R> T.bindInAdapter(binderCloud: BinderCloud, eventTag: String, initValueEnabled: Boolean = true, block: T.() -> R) {
@@ -40,9 +44,9 @@ fun <T : View> T.bind(binderCloud: BinderCloud, eventTag: String, initValueEnabl
         event.changed()
     }
     val adapterTag = getTag(ID_IN_ADAPTER)
-    if (adapterTag!=null){
+    if (adapterTag != null) {
         binderCloud.addAdapterEvent(this, eventTag, event)
-    }else {
+    } else {
         binderCloud.addEvent(eventTag, event)
     }
 }
@@ -53,9 +57,9 @@ fun <T : TextView> T.bindText(binderCloud: BinderCloud, eventTag: String, initVa
         event.changed()
     }
     val adapterTag = getTag(ID_IN_ADAPTER)
-    if (adapterTag!=null){
+    if (adapterTag != null) {
         binderCloud.addAdapterEvent(this, eventTag, event)
-    }else {
+    } else {
         binderCloud.addEvent(eventTag, event)
     }
 }
@@ -66,9 +70,9 @@ fun <T : View> T.bindVisibility(binderCloud: BinderCloud, eventTag: String, init
         event.changed()
     }
     val adapterTag = getTag(ID_IN_ADAPTER)
-    if (adapterTag!=null){
+    if (adapterTag != null) {
         binderCloud.addAdapterEvent(this, eventTag, event)
-    }else {
+    } else {
         binderCloud.addEvent(eventTag, event)
     }
 }
@@ -79,9 +83,9 @@ fun <T : ImageView> T.bindImageBitmap(binderCloud: BinderCloud, eventTag: String
         event.changed()
     }
     val adapterTag = getTag(ID_IN_ADAPTER)
-    if (adapterTag!=null){
+    if (adapterTag != null) {
         binderCloud.addAdapterEvent(this, eventTag, event)
-    }else {
+    } else {
         binderCloud.addEvent(eventTag, event)
     }
 }
@@ -92,9 +96,9 @@ fun <T : ImageView> T.bindImageResource(binderCloud: BinderCloud, eventTag: Stri
         event.changed()
     }
     val adapterTag = getTag(ID_IN_ADAPTER)
-    if (adapterTag!=null){
+    if (adapterTag != null) {
         binderCloud.addAdapterEvent(this, eventTag, event)
-    }else {
+    } else {
         binderCloud.addEvent(eventTag, event)
     }
 }
