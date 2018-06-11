@@ -26,8 +26,14 @@ abstract class BinderCloud {
 
     @Deprecated("用不到，不会影响到GC")
     public fun clear() {
-        mainHandler = null
+        mainHandler?.removeCallbacksAndMessages(null)
         binderMap.clear()
+    }
+
+    public fun destroy() {
+        binderMap.clear()
+        mainHandler?.removeCallbacksAndMessages(null)
+        mainHandler = null
     }
 
     protected fun getBinderMap():HashMap<String, ArrayList<Event>>{
@@ -38,7 +44,7 @@ abstract class BinderCloud {
         var existList: ArrayList<Event>? = binderMap[eventTag]
         if (existList == null) {
             existList = ArrayList()
-            binderMap.put(eventTag, existList)
+            binderMap[eventTag] = existList
         }
         existList.add(event)
     }
@@ -47,10 +53,10 @@ abstract class BinderCloud {
         var existBinderMap: HashMap<Any, Event>? = adapterBinderMap[eventTag]
         if (existBinderMap==null){
             existBinderMap = HashMap()
-            existBinderMap.put(t, event)
-            adapterBinderMap.put(eventTag, existBinderMap)
+            existBinderMap[t] = event
+            adapterBinderMap[eventTag] = existBinderMap
         } else {
-            existBinderMap.put(t, event)
+            existBinderMap[t] = event
         }
     }
 
@@ -61,14 +67,14 @@ abstract class BinderCloud {
         val existList: ArrayList<Event>? = binderMap[eventTag]
         existList?.forEach {
             if (debugMode == DebugMode.MODE_DETAILED) {
-                Log.d(tag, "detail notifyDataChanged : ${it}")
+                Log.d(tag, "[$eventTag] -> detail notifyDataChanged : $it")
             }
             mainHandler?.post { it.changed() }
         }
         val eventsInAdapter: HashMap<Any, Event>? = adapterBinderMap[eventTag]
         eventsInAdapter?.values?.forEach {
             if (debugMode == DebugMode.MODE_DETAILED) {
-                Log.d(tag, "detail notifyDataChanged in adapter : ${it}")
+                Log.d(tag, "detail notifyDataChanged in adapter : $it")
             }
             mainHandler?.post { it.changed() }
         }
