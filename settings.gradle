@@ -1,1 +1,1 @@
-include ':app', ':binder', ':binder-anko'
+include ':app', ':binder', ':binder-anko', ':binder_lifecycle'

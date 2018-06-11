@@ -12,6 +12,10 @@ import kotlin.collections.forEach
  */
 abstract class BinderCloud {
 
+    companion object {
+        public var globalDebugMode: DebugMode = DebugMode.MODE_NONE
+    }
+
     private val tag = javaClass.simpleName
 
     enum class DebugMode {
@@ -43,6 +47,10 @@ abstract class BinderCloud {
                 while (iterator.hasNext()) {
                     val value = iterator.next()
                     if (any == value.getObserver()) {
+                        if (globalDebugMode == DebugMode.MODE_DETAILED
+                                || debugMode == DebugMode.MODE_DETAILED) {
+                            Log.d(tag, "[$value] -> has removed from binderCloud:$this")
+                        }
                         iterator.remove()
                     }
                 }
@@ -54,6 +62,10 @@ abstract class BinderCloud {
                 while (iterator.hasNext()) {
                     val value = iterator.next()
                     if (any == value.getObserver()) {
+                        if (globalDebugMode == DebugMode.MODE_DETAILED
+                                || debugMode == DebugMode.MODE_DETAILED) {
+                            Log.d(tag, "[$value] -> has removed from binderCloud:$this")
+                        }
                         iterator.remove()
                     }
                 }
@@ -86,22 +98,26 @@ abstract class BinderCloud {
     }
 
     fun notifyDataChanged(eventTag: String) {
-        if (debugMode != DebugMode.MODE_NONE) {
+        if (globalDebugMode != DebugMode.MODE_NONE
+                || debugMode != DebugMode.MODE_NONE) {
             Log.d(tag, "notifyDataChanged : $eventTag")
         }
         val existList: ArrayList<Event<*>>? = binderMap[eventTag]
         existList?.forEach {
-            if (debugMode == DebugMode.MODE_DETAILED) {
+            if (globalDebugMode == DebugMode.MODE_DETAILED
+                    || debugMode == DebugMode.MODE_DETAILED) {
                 Log.d(tag, "[$eventTag] -> detail notifyDataChanged : $it")
             }
             mainHandler?.post { it.changed() }
         }
         val eventsInAdapter: HashMap<Any, Event<*>>? = adapterBinderMap[eventTag]
         eventsInAdapter?.values?.forEach {
-            if (debugMode == DebugMode.MODE_DETAILED) {
+            if (globalDebugMode == DebugMode.MODE_DETAILED
+                    || debugMode == DebugMode.MODE_DETAILED) {
                 Log.d(tag, "detail notifyDataChanged in adapter : $it")
             }
             mainHandler?.post { it.changed() }
         }
     }
+
 }

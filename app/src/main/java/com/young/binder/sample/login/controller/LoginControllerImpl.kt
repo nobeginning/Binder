@@ -27,7 +27,7 @@ class LoginControllerImpl(private val act: Activity, private val dataBinder: Log
             dataBinder.loginDoing = true
             val loginTask = bg {
                 println("login start -- 2")
-                Thread.sleep(2000)
+                Thread.sleep(5000)
                 User(dataBinder,
                         username,
                         random.nextInt(100) + 1,
