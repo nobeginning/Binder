@@ -1,7 +1,7 @@
 package com.young.binder.anko
 
 import android.view.View
-import com.young.binder.BinderCloud
+import com.young.binder.AbstractDataCenter
 import com.young.binder.DataCenter
 import com.young.binder.controller.Controller
 import org.jetbrains.anko.AnkoContextImpl

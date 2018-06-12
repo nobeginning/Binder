@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.young.binder.AbstractDataCenter
 import com.young.binder.DataCenter
 import com.young.binder.sample.R
 import com.young.binder.sample.login.controller.LoginController
@@ -23,7 +24,7 @@ class NormalLoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DataCenter.globalDebugMode = DataCenter.DebugMode.MODE_DETAILED
+        AbstractDataCenter.globalDebugMode = DataCenter.DebugMode.MODE_DETAILED
         setContentView(R.layout.activity_login)
         val loginController: LoginController = LoginControllerImpl(this, this, dataBinder)
         NormalLoginBinder().bind(contentView!!, loginController, dataBinder)

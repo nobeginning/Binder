@@ -5,10 +5,7 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
 import android.util.Log
-import com.young.binder.DataCenter
-import com.young.binder.bind
-import com.young.binder.bindInAdapter
-import com.young.binder.unBindFrom
+import com.young.binder.*
 
 
 fun <T, R> T.bind(lifecycleOwner: LifecycleOwner?,
@@ -55,7 +52,7 @@ fun <T, R> T.bindInAdapter(lifecycleOwner: LifecycleOwner?,
 }
 
 class BinderLifecycleObserver(var dataCenter: DataCenter?,
-                              var event: LifecycleEvent<*, *>?) : LifecycleObserver {
+                              var event: Event<*>?) : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy(lifecycleOwner: LifecycleOwner) {

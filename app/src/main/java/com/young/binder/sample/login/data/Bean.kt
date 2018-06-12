@@ -1,14 +1,14 @@
 package com.young.binder.sample.login.data
 
-import com.young.binder.DataCenter
+import com.young.binder.AbstractDataCenter
 
 /**
  * Created by young on 2017/11/10.
  */
 
-open class Bean(dataCenter: DataCenter)
+open class Bean(dataCenter: AbstractDataCenter?)
 
-class User(private val dataCenter: DataCenter,
+class User(private val dataCenter: AbstractDataCenter? = null,
            val name: String,
            val age: Int,
            val address: String,
@@ -17,6 +17,6 @@ class User(private val dataCenter: DataCenter,
         set(value) {
             field = value
             println("do the set function")
-            dataCenter.notifyDataChanged("icon")
+            dataCenter?.notifyDataChanged("icon")
         }
 }

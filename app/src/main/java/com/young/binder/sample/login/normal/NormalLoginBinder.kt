@@ -2,12 +2,13 @@ package com.young.binder.sample.login.normal
 
 import android.app.Activity
 import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.Observer
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.young.binder.DataCenter
+import com.young.binder.AbstractDataCenter
 import com.young.binder.NormalBinder
 import com.young.binder.bind
 import com.young.binder.lifecycle.bind
@@ -22,7 +23,7 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
  */
 class NormalLoginBinder : NormalBinder<LoginController, LoginDataCenter> {
 
-    inner class ViewDataCenter : DataCenter() {
+    inner class ViewAbstractDataCenter : AbstractDataCenter() {
         var username: String = ""
             set(value) {
                 field = value
@@ -35,16 +36,29 @@ class NormalLoginBinder : NormalBinder<LoginController, LoginDataCenter> {
             }
     }
 
-    val viewBinder = ViewDataCenter()
+    val viewBinder = ViewAbstractDataCenter()
     private val listener: Any = Any()
     var toast: Toast? = null
 
-    override fun bind(view: View, loginController: LoginController, dataBinder: LoginDataCenter) {
+    override fun bind(view: View, loginController: LoginController, dataCenter: LoginDataCenter) {
         val context: Activity = loginController.getOwnerActivity()
         var lifecycleOwner: LifecycleOwner? = null
         if (context is LifecycleOwner) {
             lifecycleOwner = context
         }
+
+        dataCenter.loginStatus.observe(lifecycleOwner) {
+            view.btnLogin.text = when (it) {
+                LoginDataCenter.LoginStatus.LOGIN_DOING -> {
+                    "登录中..."
+                }
+                LoginDataCenter.LoginStatus.LOGIN_COMPLETED -> "登录完成"
+                else -> "登录"
+            }
+        }
+
+
+
         view.etUsername.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 viewBinder.username = s!!.toString()
@@ -82,21 +96,21 @@ class NormalLoginBinder : NormalBinder<LoginController, LoginDataCenter> {
         }
 
         view.btnLogin.onClick { loginController.login(viewBinder.username, viewBinder.password) }
-        view.tvResult.bind(lifecycleOwner, dataBinder, "loginSuccess", false) {
-            text = "Hello! ${dataBinder.user?.name}, 您的信息如下：\n" +
-                    "用户名：${dataBinder.user?.name}\n" +
-                    "年龄：${dataBinder.user?.age}\n" +
-                    "地址：${dataBinder.user?.address}"
+        view.tvResult.bind(lifecycleOwner, dataCenter, "loginSuccess", false) {
+            text = "Hello! ${dataCenter.user?.name}, 您的信息如下：\n" +
+                    "用户名：${dataCenter.user?.name}\n" +
+                    "年龄：${dataCenter.user?.age}\n" +
+                    "地址：${dataCenter.user?.address}"
         }
-        view.progressBar.bind(lifecycleOwner, dataBinder, "loginStart") {
-            visibility = when (dataBinder.loginDoing) {
+        view.progressBar.bind(lifecycleOwner, dataCenter, "loginStart") {
+            visibility = when (dataCenter.loginDoing) {
                 true -> View.VISIBLE
                 else -> View.GONE
             }
         }
-        view.ivIcon.bind(lifecycleOwner, dataBinder, "icon", false) {
+        view.ivIcon.bind(lifecycleOwner, dataCenter, "icon", false) {
             Glide.with(view.ivIcon)
-                    .load(dataBinder.user?.icon)
+                    .load(dataCenter.user?.icon)
                     .into(view.ivIcon)
         }
         view.ivIcon.setOnClickListener {
