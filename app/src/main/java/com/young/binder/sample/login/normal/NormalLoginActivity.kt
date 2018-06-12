@@ -25,7 +25,7 @@ class NormalLoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         DataCenter.globalDebugMode = DataCenter.DebugMode.MODE_DETAILED
         setContentView(R.layout.activity_login)
-        val loginController: LoginController = LoginControllerImpl(this, dataBinder)
+        val loginController: LoginController = LoginControllerImpl(this, this, dataBinder)
         NormalLoginBinder().bind(contentView!!, loginController, dataBinder)
     }
 }

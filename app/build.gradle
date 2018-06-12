@@ -31,13 +31,13 @@ dependencies {
     implementation 'org.jetbrains.anko:anko:0.10.2'
     implementation 'com.github.bumptech.glide:glide:4.3.0'
 
-    implementation 'com.github.nobeginning.Binder:binder_lifecycle:0.2.2'
-    implementation 'com.github.nobeginning.Binder:binder-anko:0.2.2'
-    implementation 'com.github.nobeginning.Binder:binder:0.2.2'
+//    implementation 'com.github.nobeginning.Binder:binder_lifecycle:0.2.2'
+//    implementation 'com.github.nobeginning.Binder:binder-anko:0.2.2'
+//    implementation 'com.github.nobeginning.Binder:binder:0.2.2'
 
     implementation 'android.arch.lifecycle:common:1.1.1'
 
-//    implementation project(':binder')
-//    implementation project(':binder-anko')
-//    implementation project(':binder_lifecycle')
+    implementation project(':binder')
+    implementation project(':binder-anko')
+    implementation project(':binder_lifecycle')
 }
