@@ -7,22 +7,22 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.young.binder.BinderCloud
+import com.young.binder.DataCenter
 import com.young.binder.NormalBinder
 import com.young.binder.bind
 import com.young.binder.lifecycle.bind
 import com.young.binder.sample.list.ListActivity
 import com.young.binder.sample.login.controller.LoginController
-import com.young.binder.sample.login.data.LoginBinderCloud
+import com.young.binder.sample.login.data.LoginDataCenter
 import kotlinx.android.synthetic.main.activity_login.view.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
 /**
  * Created by young on 2017/11/10.
  */
-class NormalLoginBinder : NormalBinder<LoginController, LoginBinderCloud> {
+class NormalLoginBinder : NormalBinder<LoginController, LoginDataCenter> {
 
-    inner class ViewBinderCloud : BinderCloud() {
+    inner class ViewDataCenter : DataCenter() {
         var username: String = ""
             set(value) {
                 field = value
@@ -35,11 +35,11 @@ class NormalLoginBinder : NormalBinder<LoginController, LoginBinderCloud> {
             }
     }
 
-    val viewBinder = ViewBinderCloud()
-    val listener: Any = Any()
+    val viewBinder = ViewDataCenter()
+    private val listener: Any = Any()
     var toast: Toast? = null
 
-    override fun bind(view: View, loginController: LoginController, dataBinder: LoginBinderCloud) {
+    override fun bind(view: View, loginController: LoginController, dataBinder: LoginDataCenter) {
         val context: Activity = loginController.getOwnerActivity()
         view.etUsername.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

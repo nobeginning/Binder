@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.young.binder.sample.login.controller.LoginController
 import com.young.binder.sample.login.controller.LoginControllerImpl
-import com.young.binder.sample.login.data.LoginBinderCloud
+import com.young.binder.sample.login.data.LoginDataCenter
 import com.young.binder.anko.setContentView
 
 class AnkoLoginActivity : AppCompatActivity() {
@@ -17,7 +17,7 @@ class AnkoLoginActivity : AppCompatActivity() {
         }
     }
 
-    private val bindData = LoginBinderCloud()
+    private val bindData = LoginDataCenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

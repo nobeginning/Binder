@@ -1,5 +1,6 @@
 package com.young.binder.sample.login.anko
 
+import android.arch.lifecycle.LifecycleOwner
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
@@ -8,17 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import com.young.binder.*
 import com.young.binder.sample.login.controller.LoginController
-import com.young.binder.sample.login.data.LoginBinderCloud
+import com.young.binder.sample.login.data.LoginDataCenter
 import com.young.binder.anko.AnkoBinderComponent
+import com.young.binder.lifecycle.bind
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
 /**
  * Created by young on 2017/11/10.
  */
-class AnkoLoginActivityUI : AnkoBinderComponent<LoginController, LoginBinderCloud> {
-    override fun createView(ui: AnkoContext<LoginController>, dataBinder: LoginBinderCloud): View = with(ui) {
-        val viewBindData = object : BinderCloud() {
+class AnkoLoginActivityUI : AnkoBinderComponent<LoginController, LoginDataCenter> {
+    companion object {
+        private const val ID_LOGIN_AREA = 0x1001
+    }
+
+    override fun createView(ui: AnkoContext<LoginController>, dataCenter: LoginDataCenter): View = with(ui) {
+        val lifecycleOwner: LifecycleOwner = ui.owner.getOwnerActivity() as LifecycleOwner
+        val viewDataCenter = object : DataCenter() {
             var username: String = ""
                 set(value) {
                     field = value
@@ -30,7 +37,6 @@ class AnkoLoginActivityUI : AnkoBinderComponent<LoginController, LoginBinderClou
                     notifyDataChanged("input")
                 }
         }
-        val ID_LOGIN_AREA = 0x1001
         relativeLayout {
             verticalLayout {
                 id = ID_LOGIN_AREA
@@ -43,7 +49,7 @@ class AnkoLoginActivityUI : AnkoBinderComponent<LoginController, LoginBinderClou
                         hint = "请输入用户名"
                         addTextChangedListener(object : TextWatcher {
                             override fun afterTextChanged(s: Editable?) {
-                                viewBindData.username = s!!.toString()
+                                viewDataCenter.username = s!!.toString()
                             }
 
                             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -65,7 +71,7 @@ class AnkoLoginActivityUI : AnkoBinderComponent<LoginController, LoginBinderClou
                         hint = "请输入密码"
                         addTextChangedListener(object : TextWatcher {
                             override fun afterTextChanged(s: Editable?) {
-                                viewBindData.password = s!!.toString()
+                                viewDataCenter.password = s!!.toString()
                             }
 
                             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -80,10 +86,10 @@ class AnkoLoginActivityUI : AnkoBinderComponent<LoginController, LoginBinderClou
                 }
                 button("登录") {
                     onClick {
-                        owner.login(viewBindData.username, viewBindData.password)
+                        owner.login(viewDataCenter.username, viewDataCenter.password)
                     }
-                    bind(viewBindData, "input") {
-                        isEnabled = viewBindData.username.isNotEmpty() && viewBindData.password.isNotEmpty()
+                    bind(lifecycleOwner, viewDataCenter, "input") {
+                        isEnabled = viewDataCenter.username.isNotEmpty() && viewDataCenter.password.isNotEmpty()
                     }
                 }
             }.lparams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
@@ -91,11 +97,11 @@ class AnkoLoginActivityUI : AnkoBinderComponent<LoginController, LoginBinderClou
             }
 
             textView {
-                bindText(dataBinder, "loginSuccess", false) {
-                    "Hello! ${dataBinder.user?.name}, 您的信息如下：\n" +
-                            "用户名：${dataBinder.user?.name}\n" +
-                            "年龄：${dataBinder.user?.age}\n" +
-                            "地址：${dataBinder.user?.address}"
+                bind(lifecycleOwner, dataCenter, "loginSuccess", false) {
+                    text = "Hello! ${dataCenter.user?.name}, 您的信息如下：\n" +
+                            "用户名：${dataCenter.user?.name}\n" +
+                            "年龄：${dataCenter.user?.age}\n" +
+                            "地址：${dataCenter.user?.address}"
                 }
             }.lparams {
                 below(ID_LOGIN_AREA)
@@ -104,10 +110,10 @@ class AnkoLoginActivityUI : AnkoBinderComponent<LoginController, LoginBinderClou
             }
 
             progressBar {
-                bindVisibility(dataBinder, "loginStart") {
-                    when (dataBinder.loginDoing) {
-                        true -> Visibility.VISIBLE
-                        else -> Visibility.GONE
+                bind(lifecycleOwner, dataCenter, "loginStart") {
+                    visibility = when (dataCenter.loginDoing) {
+                        true -> View.VISIBLE
+                        else -> View.GONE
                     }
                 }
             }.lparams {
