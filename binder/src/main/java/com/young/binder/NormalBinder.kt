@@ -6,6 +6,6 @@ import com.young.binder.controller.Controller
 /**
  * Created by young on 2017/11/10.
  */
-interface NormalBinder<in T : Controller, in R : BinderCloud> {
-    fun bind(view: View, controller: T, binderCloud: R)
+interface NormalBinder<in T : Controller, in R : DataCenter> {
+    fun bind(view: View, controller: T, dataCenter: R)
 }

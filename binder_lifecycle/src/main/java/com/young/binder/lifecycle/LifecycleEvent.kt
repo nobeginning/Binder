@@ -5,7 +5,7 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
 import android.util.Log
-import com.young.binder.BinderCloud
+import com.young.binder.DataCenter
 import com.young.binder.Event
 
 class LifecycleEvent<T, out R>(
@@ -25,7 +25,7 @@ class LifecycleEvent<T, out R>(
             fun onStart(lifecycleOwner: LifecycleOwner) {
                 isActive = true
                 if (hasBeenCalledWhenStopping) {
-                    if (BinderCloud.globalDebugMode != BinderCloud.DebugMode.MODE_NONE) {
+                    if (DataCenter.globalDebugMode != DataCenter.DebugMode.MODE_NONE) {
                         Log.d(tag, "The lifecycle is active. " +
                                 "There is a saved call request when the lifecycle has been stopped. " +
                                 "It will be invoked automatically")
@@ -44,12 +44,12 @@ class LifecycleEvent<T, out R>(
 
     override fun changed() {
         if (isActive) {
-            if (BinderCloud.globalDebugMode != BinderCloud.DebugMode.MODE_NONE) {
+            if (DataCenter.globalDebugMode != DataCenter.DebugMode.MODE_NONE) {
                 Log.d(tag, "The call request has been invoked.")
             }
             t.block()
         } else {
-            if (BinderCloud.globalDebugMode != BinderCloud.DebugMode.MODE_NONE) {
+            if (DataCenter.globalDebugMode != DataCenter.DebugMode.MODE_NONE) {
                 Log.d(tag, "The lifecycle is not active, and the call request has been saved.")
             }
             hasBeenCalledWhenStopping = true

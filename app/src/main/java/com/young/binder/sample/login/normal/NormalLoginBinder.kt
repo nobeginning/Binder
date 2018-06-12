@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.young.binder.BinderCloud
 import com.young.binder.NormalBinder
 import com.young.binder.bind
-import com.young.binder.lifecycle.bindWithLifecycle
+import com.young.binder.lifecycle.bind
 import com.young.binder.sample.list.ListActivity
 import com.young.binder.sample.login.controller.LoginController
 import com.young.binder.sample.login.data.LoginBinderCloud
@@ -78,19 +78,19 @@ class NormalLoginBinder : NormalBinder<LoginController, LoginBinderCloud> {
         }
 
         view.btnLogin.onClick { loginController.login(viewBinder.username, viewBinder.password) }
-        view.tvResult.bindWithLifecycle(context as LifecycleOwner, dataBinder, "loginSuccess", false) {
+        view.tvResult.bind(context as LifecycleOwner, dataBinder, "loginSuccess", false) {
             text = "Hello! ${dataBinder.user?.name}, 您的信息如下：\n" +
                     "用户名：${dataBinder.user?.name}\n" +
                     "年龄：${dataBinder.user?.age}\n" +
                     "地址：${dataBinder.user?.address}"
         }
-        view.progressBar.bindWithLifecycle(context as LifecycleOwner, dataBinder, "loginStart") {
+        view.progressBar.bind(context as LifecycleOwner, dataBinder, "loginStart") {
             visibility = when (dataBinder.loginDoing) {
                 true -> View.VISIBLE
                 else -> View.GONE
             }
         }
-        view.ivIcon.bindWithLifecycle(context as LifecycleOwner, dataBinder, "icon", false) {
+        view.ivIcon.bind(context as LifecycleOwner, dataBinder, "icon", false) {
             Glide.with(view.ivIcon)
                     .load(dataBinder.user?.icon)
                     .into(view.ivIcon)
