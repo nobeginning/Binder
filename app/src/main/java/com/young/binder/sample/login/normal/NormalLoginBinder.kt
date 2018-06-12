@@ -41,6 +41,10 @@ class NormalLoginBinder : NormalBinder<LoginController, LoginDataCenter> {
 
     override fun bind(view: View, loginController: LoginController, dataBinder: LoginDataCenter) {
         val context: Activity = loginController.getOwnerActivity()
+        var lifecycleOwner: LifecycleOwner? = null
+        if (context is LifecycleOwner) {
+            lifecycleOwner = context
+        }
         view.etUsername.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 viewBinder.username = s!!.toString()
@@ -78,19 +82,19 @@ class NormalLoginBinder : NormalBinder<LoginController, LoginDataCenter> {
         }
 
         view.btnLogin.onClick { loginController.login(viewBinder.username, viewBinder.password) }
-        view.tvResult.bind(context as LifecycleOwner, dataBinder, "loginSuccess", false) {
+        view.tvResult.bind(lifecycleOwner, dataBinder, "loginSuccess", false) {
             text = "Hello! ${dataBinder.user?.name}, 您的信息如下：\n" +
                     "用户名：${dataBinder.user?.name}\n" +
                     "年龄：${dataBinder.user?.age}\n" +
                     "地址：${dataBinder.user?.address}"
         }
-        view.progressBar.bind(context as LifecycleOwner, dataBinder, "loginStart") {
+        view.progressBar.bind(lifecycleOwner, dataBinder, "loginStart") {
             visibility = when (dataBinder.loginDoing) {
                 true -> View.VISIBLE
                 else -> View.GONE
             }
         }
-        view.ivIcon.bind(context as LifecycleOwner, dataBinder, "icon", false) {
+        view.ivIcon.bind(lifecycleOwner, dataBinder, "icon", false) {
             Glide.with(view.ivIcon)
                     .load(dataBinder.user?.icon)
                     .into(view.ivIcon)

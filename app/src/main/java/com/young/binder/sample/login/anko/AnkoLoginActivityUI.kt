@@ -24,7 +24,7 @@ class AnkoLoginActivityUI : AnkoBinderComponent<LoginController, LoginDataCenter
     }
 
     override fun createView(ui: AnkoContext<LoginController>, dataCenter: LoginDataCenter): View = with(ui) {
-        val lifecycleOwner: LifecycleOwner = ui.owner.getOwnerActivity() as LifecycleOwner
+        val lifecycleOwner: LifecycleOwner? = ui.owner.getOwnerActivity() as LifecycleOwner?
         val viewDataCenter = object : DataCenter() {
             var username: String = ""
                 set(value) {

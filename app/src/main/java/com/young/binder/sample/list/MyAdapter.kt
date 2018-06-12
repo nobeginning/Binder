@@ -52,14 +52,14 @@ class MyAdapter(private val binderCloud: ListActivityBinderCloud,
             }
         }
 
-        view.ivIcon.inAdapter().bind(binderCloud, "iconChanged"){
+        view.ivIcon.bindInAdapter(binderCloud, "iconChanged") {
             Glide.with(controller.getOwnerActivity()).load(getItem(position).icon).into(view.ivIcon)
         }
-        view.tvTitle.inAdapter().bindText(binderCloud, "titleChanged"){
+        view.tvTitle.bindInAdapter(binderCloud, "titleChanged") {
             println("触发了titleChanged $position")
             getItem(position).title
         }
-        view.tvDesc.inAdapter().bindText(binderCloud, "descChanged"){
+        view.tvDesc.bindInAdapter(binderCloud, "descChanged") {
             getItem(position).description
         }
         return view
