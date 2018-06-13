@@ -99,7 +99,7 @@ class Data<T>(value: T? = null) {
 
     private inner class DelegateDataCenter : AbstractDataCenter() {
         init {
-            debugMode = DataCenter.DebugMode.MODE_DETAILED
+            debugMode = DataCenter.DebugMode.MODE_NONE
         }
 
         val tag = "DelegateDataCenter"

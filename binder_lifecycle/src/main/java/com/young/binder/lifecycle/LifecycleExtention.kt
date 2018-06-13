@@ -7,6 +7,18 @@ import android.arch.lifecycle.OnLifecycleEvent
 import android.util.Log
 import com.young.binder.*
 
+fun <T : DataCenter> T.observeEvent(lifecycleOwner: LifecycleOwner?,
+                                    eventTag: String,
+                                    block: () -> Unit) {
+    if (lifecycleOwner == null) {
+        observeEvent(eventTag, block)
+        return
+    }
+    val event = LifecycleBlockEvent(lifecycleOwner, block)
+    lifecycleOwner.lifecycle.addObserver(BinderLifecycleObserver(this, event))
+    addEvent(eventTag, event)
+}
+
 
 fun <T, R> T.bind(lifecycleOwner: LifecycleOwner?,
                   dataCenter: DataCenter,

@@ -9,16 +9,11 @@ import com.young.binder.AbstractDataCenter
 import com.young.binder.DataCenter
 import com.young.binder.Event
 
-class LifecycleEvent<T, out R>(
-        lifecycleOwner: LifecycleOwner,
-        private val t: T,
-        private val block: T.() -> R
-) : Event<T> {
+abstract class LCEvent<T>(lifecycleOwner: LifecycleOwner) : Event<T> {
+    private val tag = "LCEvent"
 
-    val tag = "LifecycleEvent"
-
-    var isActive: Boolean = false
-    var hasBeenCalledWhenStopping = false
+    protected var isActive: Boolean = false
+    protected var hasBeenCalledWhenStopping = false
 
     init {
         lifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
@@ -48,7 +43,7 @@ class LifecycleEvent<T, out R>(
             if (AbstractDataCenter.globalDebugMode != DataCenter.DebugMode.MODE_NONE) {
                 Log.d(tag, "The call request has been invoked.")
             }
-            t.block()
+            realChanged()
         } else {
             if (AbstractDataCenter.globalDebugMode != DataCenter.DebugMode.MODE_NONE) {
                 Log.d(tag, "The lifecycle is not active, and the call request has been saved.")
@@ -57,8 +52,36 @@ class LifecycleEvent<T, out R>(
         }
     }
 
+    abstract fun realChanged()
+
+}
+
+class LifecycleEvent<T, out R>(
+        lifecycleOwner: LifecycleOwner,
+        private val t: T,
+        private val block: T.() -> R
+) : LCEvent<T>(lifecycleOwner) {
+
+    override fun realChanged() {
+        t.block()
+    }
+
     override fun getObserver(): T {
         return t
+    }
+
+}
+
+class LifecycleBlockEvent(
+        lifecycleOwner: LifecycleOwner,
+        private val block: () -> Unit
+) : LCEvent<Unit>(lifecycleOwner) {
+
+    override fun realChanged() {
+        block()
+    }
+
+    override fun getObserver() {
     }
 
 }

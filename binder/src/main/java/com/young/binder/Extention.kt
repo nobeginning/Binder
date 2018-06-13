@@ -9,6 +9,11 @@ import android.widget.TextView
  * Created by young on 2017/11/13.
  */
 
+fun <T : DataCenter> T.observeEvent(eventTag: String, block: () -> Unit) {
+    val event = BlockEvent(block)
+    addEvent(eventTag, event)
+}
+
 fun <T, R> T.bind(dataCenter: DataCenter, eventTag: String, initValueEnabled: Boolean = true, block: T.() -> R) {
     val event = SuperEvent(this, block)
     if (initValueEnabled) {

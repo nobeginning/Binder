@@ -14,6 +14,17 @@ interface Event<out T> {
     fun getObserver(): T
 }
 
+data class BlockEvent(private val block: () -> Unit) : Event<Unit> {
+    override fun changed() {
+        block()
+    }
+
+    override fun getObserver() {
+
+    }
+
+}
+
 data class SuperEvent<T, out R>(private val t: T, private val block: T.() -> R) : Event<T> {
     override fun getObserver(): T {
         return t
