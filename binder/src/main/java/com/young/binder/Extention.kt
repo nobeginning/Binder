@@ -14,6 +14,11 @@ fun <T : DataCenter> T.observeEvent(eventTag: String, block: () -> Unit) {
     addEvent(eventTag, event)
 }
 
+fun <T : DataCenter> T.whenEvent(eventTag: String, block: () -> Unit) {
+    val event = BlockEvent(block)
+    addEvent(eventTag, event)
+}
+
 fun <T, R> T.bind(dataCenter: DataCenter, eventTag: String, initValueEnabled: Boolean = true, block: T.() -> R) {
     val event = SuperEvent(this, block)
     if (initValueEnabled) {
